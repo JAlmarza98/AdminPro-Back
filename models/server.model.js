@@ -15,7 +15,8 @@ class Server {
             users: '/api/users',
             hospitals: '/api/hospitals',
             doctors: '/api/doctors',
-            search: '/api/search'
+            search: '/api/search',
+            uploads: '/api/uploads'
         }
 
         //Conexion a base de datos
@@ -58,6 +59,7 @@ class Server {
         this.app.use(this.paths.hospitals, require('../routes/hospital.routes'));
         this.app.use(this.paths.doctors, require('../routes/doctor.routes'));
         this.app.use(this.paths.search, require('../routes/search.routes'));
+        this.app.use(this.paths.uploads, require('../routes/uploads.routes'));
     }
 
     listen() {
