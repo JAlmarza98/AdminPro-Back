@@ -1,4 +1,4 @@
-const { Role, User, Category, Product } = require('../models')
+const { Role, User, Hospital, Product } = require('../models')
 
 const validRole = async (role = '') => {
 
@@ -27,8 +27,8 @@ const userID = async (id) => {
 
 const hospitalExist = async (id) => {
 
-    const catExist = await Hospital.findById(id);
-    if (!catExist) {
+    const hostpExist = await Hospital.findById(id);
+    if (!hostpExist) {
         throw new Error(`El ID no existe`);
     }
 }

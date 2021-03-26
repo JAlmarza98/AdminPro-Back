@@ -12,6 +12,7 @@ const router = Router();
 router.get('/', hospitalGet);
 
 router.post('/', [
+    jwtValidator,
     check('name', 'El nombre es obligarotio').not().isEmpty(),
     fieldsValidator
 ], hospitalPost);

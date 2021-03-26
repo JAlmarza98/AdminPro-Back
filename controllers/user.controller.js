@@ -16,8 +16,8 @@ const userGet = async (req = request, res = response) => {
     const [total_users, users] = await Promise.all([
         User.countDocuments({ status: true }),
         User.find({ status: true })
-            .skip((Number(page) - 1) * 10)
-            .limit(Number(page) * 10)
+            .skip((Number(page) - 1) * process.env.ITEMS_PER_PAGE)
+            .limit(Number(page) * process.env.ITEMS_PER_PAGE)
     ])
 
     res.json({

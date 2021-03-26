@@ -3,6 +3,8 @@ const { check } = require('express-validator');
 
 const { fieldsValidator, jwtValidator, adminRole } = require('../middlewares');
 
+const { hospitalExist } = require('../helpers')
+
 const { doctorGet, doctorPost, doctorPut, doctorDelete } = require('../controllers/doctor.controller');
 
 const router = Router();
@@ -10,7 +12,11 @@ const router = Router();
 router.get('/', doctorGet);
 
 router.post('/', [
+    jwtValidator,
     check('name', 'El nombre es obligarotio').not().isEmpty(),
+    check('hospital', 'El hospital es obligarotio').not().isEmpty(),
+    check('hospital', 'No es un ID valido').isMongoId(),
+    check('hospital').custom(hospitalExist),
     fieldsValidator
 ], doctorPost);
 
