@@ -13,7 +13,8 @@ Consta de:
 - Sistema de baneo de Usuarios.
 - Autenticacion de usuarios mediante JSON Web Token.
 - Metodos GET paginados.
-- Sistema de permisos basado en roles
+- Sistema de permisos basado en roles.
+- Sistema de busqueda tanto global como especifica.
 
 ## Configuracion
 
