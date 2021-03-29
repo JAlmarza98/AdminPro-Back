@@ -18,6 +18,7 @@ router.post('/', [
 ], hospitalPost);
 
 router.put('/:id', [
+    jwtValidator,
     check('id', 'No es un ID valido').isMongoId(),
     check('id').custom(hospitalExist),
     fieldsValidator

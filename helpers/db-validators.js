@@ -1,4 +1,4 @@
-const { Role, User, Hospital, Product } = require('../models')
+const { Role, User, Hospital, Doctor } = require('../models')
 
 const validRole = async (role = '') => {
 
@@ -6,7 +6,6 @@ const validRole = async (role = '') => {
     if (!roleExist) {
         throw new Error(`El rol ${role} no es valido`);
     }
-
 }
 
 const emailExist = async (email = '') => {
@@ -33,13 +32,13 @@ const hospitalExist = async (id) => {
     }
 }
 
-// const productExist = async (id) => {
+const doctorExist = async (id) => {
 
-//     const prodExist = await Product.findById(id);
-//     if (!prodExist) {
-//         throw new Error(`El ID no existe`);
-//     }
-// }
+    const docExist = await Doctor.findById(id);
+    if (!docExist) {
+        throw new Error(`El ID no existe`);
+    }
+}
 
 const allowedCollections = (collection = '', collections = []) => {
 
@@ -53,4 +52,4 @@ const allowedCollections = (collection = '', collections = []) => {
 }
 
 
-module.exports = { validRole, emailExist, userID, hospitalExist, allowedCollections };
+module.exports = { validRole, emailExist, userID, hospitalExist, doctorExist, allowedCollections };

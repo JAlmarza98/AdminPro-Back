@@ -7,6 +7,8 @@ Escrito en NodeJs y usando MongoDB como base de datos
 
 Consta de:
 - CRUD de usuarios.
+- CRUD de hospitales.
+- CRUD de medicos.
 - Metodo de Login propio.
 - Autenticacion por Google.
 - Todas las validaciones de seguridad pertinentes.
@@ -15,6 +17,7 @@ Consta de:
 - Metodos GET paginados.
 - Sistema de permisos basado en roles.
 - Sistema de busqueda tanto global como especifica.
+- Subida de archivos y proteccionde los mismos.
 
 ## Configuracion
 

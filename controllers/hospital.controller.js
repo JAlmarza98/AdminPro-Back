@@ -54,15 +54,42 @@ const hospitalPost = async (req = request, res = response) => {
 }
 
 const hospitalPut = async (req = request, res = response) => {
-    res.json({
-        msg: 'put de hospitales'
-    })
+    const { name } = req.body;
+    const { id } = req.params;
+
+    try {
+        const hospitalChanges = { name, user: user_auth }
+        const hospitalUpdated = await Hospital.findByIdAndUpdate(id, hospitalChanges, { new: true })
+
+        res.json({
+            hospital: hospitalUpdated
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            msg: "Hable con el administrador"
+        })
+    }
+
+
 }
 
 const hospitalDelete = async (req = request, res = response) => {
-    res.json({
-        msg: 'delete de hospitales'
-    })
+
+    const { id } = req.params;
+
+    try {
+
+        await Hospital.findByIdAndDelete(id);
+
+        res.json({
+            msg: "Hospital eliminado de forma satisfactoria"
+        })
+    } catch (error) {
+        res.status(500).json({
+            msg: "Hable con el administrador"
+        })
+    }
 }
 
 module.exports = {

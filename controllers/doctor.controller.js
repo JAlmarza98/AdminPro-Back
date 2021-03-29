@@ -56,17 +56,52 @@ const doctorPost = async (req = request, res = response) => {
 }
 
 const doctorPut = async (req = request, res = response) => {
-    res.json({
-        msg: 'put de doctores'
-    })
+
+    const { id } = req.params;
+    const { name, hospital } = req.body;
+
+    try {
+
+        const hospitalValid = await Hospital.findById(hospital);
+
+        if (!hospitalValid) {
+            return res.status(400).json({
+                msg: 'El hospital indicado no existe'
+            });
+        }
+
+        const doctorChanges = { name, hospital, user_auth };
+
+        const doctorUpdate = await Doctor.findByIdAndUpdate(id, doctorChanges, { new: true });
+
+        res.json({
+            doctor: doctorUpdate
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            msg: 'Hable con el administrador'
+        });
+    }
 }
 
 const doctorDelete = async (req = request, res = response) => {
-    res.json({
-        msg: 'delete de doctores'
-    })
-}
 
+    const { id } = req.params;
+
+    try {
+
+        await Doctor.findByIdAndDelete(id);
+
+        res.json({
+            msg: "Medico eliminado de forma satisfactoria"
+        })
+    } catch (error) {
+        res.status(500).json({
+            msg: "Hable con el administrador"
+        })
+    }
+}
 module.exports = {
     doctorGet,
     doctorPost,

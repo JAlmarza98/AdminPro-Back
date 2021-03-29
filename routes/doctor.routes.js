@@ -3,7 +3,7 @@ const { check } = require('express-validator');
 
 const { fieldsValidator, jwtValidator, adminRole } = require('../middlewares');
 
-const { hospitalExist } = require('../helpers')
+const { hospitalExist, doctorExist } = require('../helpers')
 
 const { doctorGet, doctorPost, doctorPut, doctorDelete } = require('../controllers/doctor.controller');
 
@@ -21,7 +21,9 @@ router.post('/', [
 ], doctorPost);
 
 router.put('/:id', [
+    jwtValidator,
     check('id', 'No es un ID valido').isMongoId(),
+    check('id').custom(doctorExist),
     fieldsValidator
 ], doctorPut);
 
@@ -29,6 +31,7 @@ router.delete('/:id', [
     jwtValidator,
     adminRole,
     check('id', 'No es un ID valido').isMongoId(),
+    check('id').custom(doctorExist),
     fieldsValidator
 ], doctorDelete);
 
