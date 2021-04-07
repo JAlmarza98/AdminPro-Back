@@ -3,6 +3,8 @@ const bcryptjs = require('bcryptjs');
 
 const User = require('../models/user.model');
 
+const { generateJWT } = require('../helpers');
+
 const userGet = async (req = request, res = response) => {
 
     const { page = 1 } = req.query;
@@ -39,13 +41,15 @@ const userPost = async (req = request, res = response) => {
     //Guardar en BBDD
     await user.save();
 
-    res.json(user);
+    const token = await generateJWT(user.id);
+
+    res.json({ user, token });
 }
 
 const userPut = async (req = request, res = response) => {
 
     const { id } = req.params;
-    const { _id, password, google, email, ...others } = req.body;
+    const { _id, password, google, ...others } = req.body;
 
     if (password) {
         const salt = bcryptjs.genSaltSync();

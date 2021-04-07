@@ -105,7 +105,9 @@ const refreshToken = async (req = request, res = response) => {
 
     const token = await generateJWT(user_auth.id);
 
-    res.json({ token });
+    const user = await User.findById(user_auth.id);
+
+    res.json({ token, user });
 }
 
 module.exports = { login, googleSingIn, refreshToken }

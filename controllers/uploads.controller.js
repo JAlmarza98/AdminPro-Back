@@ -1,68 +1,61 @@
 const path = require('path');
 const fs = require('fs');
+const { v4: uuidv4 } = require('uuid');
 
-const { response, request } = require('express');
+const { updateImage } = require('../helpers')
 
-const { fileUpload } = require('../helpers');
-
-const { User, Hospital, Doctor } = require('../models');
-
-const updateImg = async (req = request, res = response) => {
+const updateImg = async (req, res) => {
 
     const { collec, term } = req.params;
 
-    let model;
-
-    switch (collec) {
-
-        case 'users':
-            model = await User.findById(term);
-
-            if (!model) {
-                return res.status(400).json({ msg: `No existe un usuario con el id ${term}` })
-            }
-
-            break;
-
-        case 'hospitals':
-            model = await Hospital.findById(term);
-
-            if (!model) {
-                return res.status(400).json({ msg: `No existe un hospital con el id ${term}` })
-            }
-
-            break;
-
-        case 'doctors':
-            model = await Doctor.findById(term);
-
-            if (!model) {
-                return res.status(400).json({ msg: `No existe un doctor con el id ${term}` })
-            }
-
-            break;
-
-        default:
-            return res.status(500).json({ msg: 'Ruta no disponible' });
+    //Validar collecion
+    const validCollections = ['users', 'hospitals', 'doctors'];
+    if (!validCollections.includes(collec)) {
+        res.status(400).json({
+            msg: 'La coleccion seleccionada no es correcta'
+        });
     }
 
-    //Limpiar imagenes anteriores
-    if (model.img) {
-        const pathImg = path.join(__dirname, '../uploads', collec, model.img);
-        if (fs.existsSync(pathImg)) {
-            fs.unlinkSync(pathImg);
+    //Validar la extension
+    const file = req.files.file;
+    const cutName = file.name.split('.');
+    const extension = cutName[cutName.length - 1];
+    const validExtensions = ['jpg', 'png', 'jpeg', 'gif'];
+    if (!validExtensions.includes(extension)) {
+        return res.status(400).json({
+            msg: `La extension ${extension} no es valida, unicamente archivos ${validExtensions}`
+        });
+    }
+
+    //Generar nombre del archivo
+    const fileName = `${uuidv4()}.${extension}`;
+
+    //Path para guardar la imagen
+    const path = `./uploads/${collec}/${fileName}`;
+
+    // Mover la imagen
+    file.mv(path, (err) => {
+        if (err) {
+            console.log(err);
+            return res.status(500).json({
+                msg: 'Error al mover la imagen'
+            });
         }
-    }
 
-    const fileName = await fileUpload(req.files, undefined, collec);
-    model.img = fileName;
+        //Actualizar base de datos
+        updateImage(collec, term, fileName);
 
-    await model.save();
+        res.json({
+            ok: true,
+            msg: 'Archivo subido con existo',
+            fileName
+        })
+    });
 
-    res.json(model);
+
 }
 
-const showImg = async (req = request, res = response) => {
+const showImg = async (req, res) => {
 
     const { collec, img } = req.params;
 

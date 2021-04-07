@@ -16,13 +16,17 @@ router.post('/', [
     check('password', 'El password debe tener mas de 6 caracteres').isLength({ min: 6 }),
     check('email', 'El correo ingresado no es valido').isEmail(),
     check('email').custom(emailExist),
-    check('role').custom(validRole),
+    // check('role').custom(validRole),
     fieldsValidator
 ], userPost);
 
 router.put('/:id', [
+    jwtValidator,
     check('id', 'No es un ID valido').isMongoId(),
     check('id').custom(userID),
+    check('name', 'El nombre es obligarotio').not().isEmpty(),
+    check('email', 'El correo ingresado no es valido').isEmail(),
+    check('email').custom(emailExist),
     check('role').custom(validRole),
     fieldsValidator
 ], userPut);

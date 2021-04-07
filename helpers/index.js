@@ -3,11 +3,11 @@
 const dbValidators = require('./db-validators');
 const generateJWT = require('./jwt-generator');
 const googleVerify = require('./google-validator');
-const fileUploads = require('./file-uploads');
+const updateImage = require('./update-img')
 
 module.exports = {
     ...dbValidators,
     ...generateJWT,
     ...googleVerify,
-    ...fileUploads
+    ...updateImage
 }
